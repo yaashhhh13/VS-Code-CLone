@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <title>Document</title>
+</head>
+<body>
+    <div id="main">
+      <div id="side">
+        <h2>sasta VS code</h2>
+        <div id="line"></div>
+        <div class="newicons">
+          <h3>open editors</h3>
+          <div class="icons">
+            <i id="fileicon" class="ri-file-add-line"></i>
+            <i id="foldericon" class="ri-folder-fill"></i>
+            <a href="/"><i class="ri-restart-line"></i></a>
+          </div>
+        </div>
+        <form class="formcreation" action="/createfile" id="fileform">
+          <input type="text" name="filename" placeholder="Enter file name">
+        </form>
+        <form class="formcreation" action="/createfolder" id="folderform">
+          <input type="text" name="foldername" placeholder="Enter folder name">
+        </form>
+        <div id="files">
+          <form action="/renamefile" id="renameform">
+            <input type="text" placeholder="Enter Filename again" name="enterfilenameagainforrename">
+            <input type="text" placeholder="Enter Newfile name" name="newfilename">
+            <button>change</button>
+          </form>
+            <% files.forEach(function(elem){ %>
+            <h3 class="file">
+                <% if(elem.isDirectory()){ %>
+                  <i class="ri-folder-fill"></i>
+              <%  } else { %>
+                  <i id="fileicon" class="ri-file-add-line"></i>
+              <% } %> 
+              <% if(elem.isDirectory()){ %>
+                <%= elem.name %>
+              <% } else{ %>
+                <a href="/file/<%= elem.name %>"><%= elem.name %></a>
+              <% } %>
+              <img src="/images/renameiconnew.png" id="renameimage" alt="">
+              <i class="ri-delete-bin-7-fill" id="deleteicon"></i>
+            </h3>
+            <% }) %>
+        </div>
+      </div>
+      <div id="right">
+        <div id="rightnav">
+          <div class="openedfile">
+            <h3><%= filename %></h3>
+            <a href="/"><i class="ri-close-circle-fill"></i></a>
+          </div>
+        </div>
+        <form action="/filechange/<%= filename %>" method="post">
+          <textarea name="filedata"> <%= filedata %> </textarea>
+          <input id="buttonsave" type="submit" value="save">
+        </form>
+        <!-- <h3>nothing here</h3> -->
+      </div>
+      <div id="deleteform">
+        <h1>X</h1>
+        <div class="deletecontent">
+          <i class="ri-question-fill"></i>
+          <h3>are you sure you want to delete this file ?</h3>
+        </div>
+        <form action="/deletefile">
+          <input type="text" placeholder="Enter file name again" name="deletedfilename">
+          <button>delete</button>
+        </form>
+      </div>
+    </div>
+
+
+    <script>
+      var fileicon = document.querySelector("#fileicon");
+      var fileform = document.querySelector("#fileform");
+      var foldericon = document.querySelector("#foldericon");
+      var folderform = document.querySelector("#folderform");
+
+      function turnoffboth(){
+        var allelems = [...(document.querySelectorAll(".formcreation"))];
+
+        allelems.forEach(function(elem){
+          elem.style.display = "none";
+        })
+      }
+
+      fileicon.addEventListener("click",function(){
+        turnoffboth();
+        fileform.style.display = "initial";
+      })
+      foldericon.addEventListener("click",function(){
+        turnoffboth();
+        folderform.style.display = "initial";
+      })
+
+
+      // code for delete file
+
+
+      document.querySelectorAll("#deleteicon").forEach(function(open){
+        open.addEventListener("click",function(){
+          document.querySelector("#deleteform").style.scale = "1"
+        })
+      })
+      document.querySelectorAll("#deleteform h1").forEach(function(close){
+        close.addEventListener("click",function(){
+          document.querySelector("#deleteform").style.scale = "0"
+        })
+      })
+
+
+      
+      // code for rename file
+      document.querySelectorAll("#renameimage").forEach(function(openrnform){
+        var click = 1;
+        openrnform.addEventListener("click",function(){
+          if(click == 1){
+            document.querySelectorAll("#renameform").forEach(function(or){
+            or.style.display = "initial";
+            var click = 2;
+            })
+          }
+          else if(click == 2){
+            document.querySelectorAll("#renameform").forEach(function(or){
+            or.style.display = "block";
+            var click = 1;
+            })
+          }
+        })
+      })
+
+    //   document.querySelectorAll("#renameimage").forEach(function (openrnform) {
+    //   openrnform.addEventListener('click', (event) => {
+    //     event.target.parentElement.querySelector("#renameform").style.display = "initial"
+    //   })
+    // })
+
+      
+    </script>
+    </body>
+</html>
